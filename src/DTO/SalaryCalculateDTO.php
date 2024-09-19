@@ -39,7 +39,11 @@ class SalaryCalculateDTO implements DtoInterface
 
     #[OA\Property(
         description: "Пользователь, для которого производится расчёт зарплаты.",
-        example: null,
+        example: [
+            "id" => 2,
+            "email" => "mail2@example.com",
+            "totalSalary" => "5071.00"
+        ],
         nullable: true
     )]
     #[Groups("salary_calculate")]
