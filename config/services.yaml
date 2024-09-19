@@ -18,6 +18,21 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.exception }
 
+    App\ValueResolver\DeserializeValueResolver:
+        arguments:
+            $serializer: '@serializer'
+            $validator: '@validator'
+            $logger: '@logger'
+        tags:
+            - { name: controller.value_resolver, priority: 100 }
+
+    App\ValueResolver\QueryParamValueResolver:
+        arguments:
+            $validator: '@validator'
+            $logger: '@logger'
+        tags:
+            - { name: controller.value_resolver, priority: 90 }
+
     App\EventListener\TimestampableListener:
         tags:
             - { name: doctrine.event_listener, event: postPersist }

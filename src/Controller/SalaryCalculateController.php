@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-
 namespace App\Controller;
 
+use App\Attribute\QueryParam;
 use App\DTO\SalaryCalculateDTO;
 use App\Exception\UserNotFoundException;
 use App\Repository\SalaryRepository;
@@ -13,7 +13,6 @@ use App\Service\SalaryCalculate\Interface\SalaryCalculatorInterface;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use OpenApi\Attributes as OA;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -27,8 +26,7 @@ class SalaryCalculateController extends AbstractController
         private readonly ExchangeInterface $exchange,
         private readonly SalaryRepository $salaryRepository,
         private readonly UserRepository   $userRepository
-    ){ }
-
+    ) { }
 
     #[Route('/user/{id}/calculate', name: 'app_user_salary_calculate_show', methods: ['GET'])]
     #[OA\Parameter(
@@ -40,18 +38,20 @@ class SalaryCalculateController extends AbstractController
     )]
     #[OA\Parameter(
         name: "percentage",
-        description: "The percentage to increase the salary",
+        description: SalaryCalculateDTO::PERCENTAGE_DESCRIPTION,
         in: "query",
-        schema: new OA\Schema(type: "float", example: "10.5")
+        required: true,
+        schema: new OA\Schema(type: "string", example: SalaryCalculateDTO::PERCENTAGE_EXAMPLE)
     )]
     #[OA\Parameter(
         name: "currency",
-        description: "The exchange rate for the currency",
+        description: SalaryCalculateDTO::CURRENCY_DESCRIPTION,
         in: "query",
+        required: true,
         schema: new OA\Schema(
             type: "string",
-            enum: ["USD", "EUR", "GBP", "CAD", "AUD"],
-            example: "USD"
+            enum: SalaryCalculateDTO::CURRENCY_CHOICES,
+            example: SalaryCalculateDTO::CURRENCY_EXAMPLE
         )
     )]
     #[OA\Response(
@@ -65,21 +65,43 @@ class SalaryCalculateController extends AbstractController
     )]
     #[OA\Tag(name: 'Salary')]
     #[Security(name: 'Bearer')]
-    public function salaryCalculateShow(int $id, SalaryCalculateDTO $salaryCalculate, Request $request): JsonResponse
+    public function salaryCalculateShow(
+        int $id,
+        #[QueryParam] SalaryCalculateDTO $salaryCalculate
+    ): JsonResponse
     {
+
+        // Поиск пользователя по ID
         $user = $this->userRepository->find($id);
         if (!$user) {
             throw new UserNotFoundException('User not found');
         }
-        $percentage = $request->query->get('percentage');
-        $currency = $request->query->get('currency');
+
+        // Установка пользователя в DTO
         $salaryCalculate->setUser($user);
-        $salaryCalculate->getUser()->setTotalSalary($this->salaryRepository->findTotalSalaryByUser($user->getId()));
-        $salaryCalculate->setCurrency($currency);
-        $salaryCalculate->setExchangeRate($this->exchange->exchangeRates($user, $currency));
-        $salaryCalculate->setAverageSalary($this->averageSalaryCalculator->calculate($user, null));
-        $salaryCalculate->setSalaryIncrease($this->salaryIncreaseCalculator->calculate($user, $percentage));
+
+        // Получение общей зарплаты пользователя
+        $totalSalary = $this->salaryRepository->findTotalSalaryByUser($user->getId());
+
+        $salaryCalculate->getUser()->setTotalSalary($totalSalary);
+
+        // Получение параметров из DTO
+        $currency = $salaryCalculate->getCurrency();
+        $percentage = $salaryCalculate->getPercentage();
+
+        // Установка курса обмена
+        $exchangeRate = $this->exchange->exchangeRates($user, $currency);
+        $salaryCalculate->setExchangeRate($exchangeRate);
+
+        // Расчёт средней зарплаты
+        $averageSalary = $this->averageSalaryCalculator->calculate($user, null);
+        $salaryCalculate->setAverageSalary($averageSalary);
+
+        // Расчёт увеличения зарплаты
+        $salaryIncrease = $this->salaryIncreaseCalculator->calculate($user, $percentage);
+        $salaryCalculate->setSalaryIncrease($salaryIncrease);
+
+        // Возврат ответа
         return $this->json($salaryCalculate, 200, [], ['groups' => 'salary_calculate']);
     }
-
 }
