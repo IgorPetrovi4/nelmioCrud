@@ -1,6 +1,5 @@
 FROM php:8.3-fpm
 ARG TIMEZONE
-ARG INSTALL_XDEBUG
 # Basic configuration
 RUN apt-get update && apt-get install -y \
     gnupg \
