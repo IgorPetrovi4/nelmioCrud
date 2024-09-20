@@ -9,11 +9,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
-use OpenApi\Attributes as OA;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'uniq_user_email', columns: ['email'])]
@@ -29,11 +27,7 @@ class User extends  AbstractLatestTimestamp implements UserInterface, PasswordAu
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[OA\Property(description: 'The email identifier of the user.')]
-    #[OA\Property(type: 'email', maxLength: 180)]
     #[Groups(["list", "salary_calculate", "create", "update"])]
-    #[Assert\NotBlank(groups: ["create"])]
-    #[Assert\Email(groups: ["default", "create", "update"])]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -46,33 +40,20 @@ class User extends  AbstractLatestTimestamp implements UserInterface, PasswordAu
     #[ORM\Column]
     private ?string $password = null;
 
-    #[OA\Property(description: 'The password property of the user.')]
-    #[OA\Property(type: 'string', maxLength: 6)]
     #[Groups(["create", "update"])]
-    #[Assert\NotBlank(groups: ["create"])]
-    #[Assert\PasswordStrength(groups: ["create", "update"])]
     private ?string $plainPassword = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[OA\Property(description: 'The name property of the user.')]
-    #[OA\Property(type: 'string', maxLength: 255)]
     #[Groups(["list", "create", "update"])]
-    #[Assert\NotBlank(groups: ["create"])]
-    #[Assert\Length(min: 2, max: 255, groups: ["default", "create", "update"])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[OA\Property(description: 'The surname property of the user.')]
-    #[OA\Property(type: 'string', maxLength: 255)]
     #[Groups(["list", "create", "update"])]
-    #[Assert\NotBlank(groups: ["create"])]
-    #[Assert\Length(min: 2, max: 255, groups: ["default", "create", "update"])]
     private ?string $surname = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    #[Groups("list")]
+    #[Groups(["list"])]
     private string|DateTimeInterface|null $employmentDate = null;
-
 
     #[Groups(["list", "salary_calculate"])]
     private ?string $totalSalary = null;
@@ -195,8 +176,9 @@ class User extends  AbstractLatestTimestamp implements UserInterface, PasswordAu
 
     public function getEmploymentDate(): ?string
     {
-        return $this->employmentDate->format('Y-m-d');
+        return $this->employmentDate ? $this->employmentDate->format('Y-m-d') : null;
     }
+
 
     public function setEmploymentDate(?\DateTimeInterface $employmentDate): static
     {

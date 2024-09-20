@@ -26,6 +26,14 @@ services:
         tags:
             - { name: controller.value_resolver, priority: 100 }
 
+    App\Mapper\EntityMapperInterface:
+        alias: App\Mapper\EntityMapper
+        public: true
+
+    App\Mapper\EntityMapper:
+        autowire: true
+        autoconfigure: false
+
     App\ValueResolver\QueryParamValueResolver:
         arguments:
             $validator: '@validator'

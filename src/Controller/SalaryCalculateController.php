@@ -65,12 +65,8 @@ class SalaryCalculateController extends AbstractController
     )]
     #[OA\Tag(name: 'Salary')]
     #[Security(name: 'Bearer')]
-    public function salaryCalculateShow(
-        int $id,
-        #[QueryParam] SalaryCalculateDTO $salaryCalculate
-    ): JsonResponse
+    public function salaryCalculateShow(int $id, #[QueryParam] SalaryCalculateDTO $salaryCalculate): JsonResponse
     {
-
         // Поиск пользователя по ID
         $user = $this->userRepository->find($id);
         if (!$user) {
