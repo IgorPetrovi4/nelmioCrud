@@ -1,0 +1,50 @@
+<?php
+declare(strict_types=1);
+
+namespace App\Controller\Telegram;
+
+
+use App\ApiClient\Interface\TelegramClientInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Attribute\Route;
+
+class TelegramBotController extends AbstractController
+{
+    public function __construct(
+        private readonly TelegramClientInterface $telegramClient
+    ) {}
+
+    #[Route('/telegram/webhook', name: 'telegram_webhook', methods: ['POST'])]
+    public function webhook(Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+        // Проверяем, что получаем команду /start
+        if (isset($data['message']['text']) && $data['message']['text'] === '/start') {
+            $chatId = $data['message']['chat']['id'];
+
+            // Запрашиваем API, если нужно (например, для получения информации)
+            // Можно добавить логику запроса к вашему API тут
+
+            $webAppUrl = 'https://2395-5-59-171-221.ngrok-free.app/webapp'; // Ваш публичный URL Web App
+
+            // Формируем клавиатуру с Web App кнопкой
+            $keyboard = [
+                [
+                    [
+                        'text' => 'Открыть калькулятор зарплаты',
+                        'web_app' => ['url' => $webAppUrl]
+                    ]
+                ]
+            ];
+
+            // Отправляем сообщение с кнопкой Web App пользователю
+            $this->telegramClient->sendMessage($chatId, 'Добро пожаловать! Нажмите на кнопку для расчета зарплаты:', $keyboard);
+        }
+
+        // Возвращаем успешный ответ для Telegram
+        return new JsonResponse(['status' => 'success']);
+    }
+}

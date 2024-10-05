@@ -1,5 +1,6 @@
 parameters:
     nbu_api.base_url: '%env(NBU_API_BASE_URL)%'
+    telegram_bot_token: '%env(TELEGRAM_BOT_TOKEN)%'
 
 services:
     # default configuration for services in *this* file
@@ -55,3 +56,10 @@ services:
     App\ApiClient\NbuApiClient:
         arguments:
             $baseUrl: '%nbu_api.base_url%'
+
+    App\ApiClient\Interface\TelegramClientInterface $telegramClient:
+        alias: App\ApiClient\TelegramClient
+
+    App\ApiClient\TelegramClient:
+        arguments:
+            $botToken: '%telegram_bot_token%'
