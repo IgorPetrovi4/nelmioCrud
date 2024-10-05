@@ -1,47 +1,46 @@
-name: Deploy to Server
+name: Deploy Symfony App
 
 on:
   push:
     branches:
-      - master  # Или ваша основная ветка
+      - master  # Деплой будет срабатывать при пуше в ветку main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
+      # Шаг 1: Клонирование кода из репозитория
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install SSH key
-        uses: webfactory/ssh-agent@v0.7.0
-        with:
-          ssh-private-key: ${{ secrets.DEPLOY_KEY }}
-
-      - name: Check Variables
+      # Шаг 2: Настройка SSH для подключения к серверу
+      - name: Set up SSH
         run: |
-          echo "DEPLOY_USER is: $DEPLOY_USER"
-          echo "SERVER_IP is: $SERVER_IP"
-          echo "DEPLOY_PATH is: $DEPLOY_PATH"
-        env:
-          DEPLOY_USER: ${{ secrets.DEPLOY_USER || 'deployer' }}
-          SERVER_IP: ${{ secrets.SERVER_IP }}
-          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH || '/var/www/html' }}
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H 34.46.133.232 >> ~/.ssh/known_hosts
 
-      - name: Deploy to Server
-        env:
-          DEPLOY_USER: ${{ secrets.DEPLOY_USER || 'deployer' }}
-          SERVER_IP: ${{ secrets.SERVER_IP }}
-          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH || '/var/www/html' }}
+      # Шаг 3: Деплой приложения с помощью rsync
+      - name: Deploy via rsync
         run: |
-          ssh -o StrictHostKeyChecking=no "$DEPLOY_USER@$SERVER_IP" "
-            cd $DEPLOY_PATH || exit;
-            if [ ! -d .git ]; then
-              git clone git@github.com:IgorPetrovi4/nelmioCrud.git $DEPLOY_PATH;
-            else
-              git pull origin master;
-            fi
-            composer install --no-interaction --prefer-dist --optimize-autoloader;
-            php bin/console doctrine:migrations:migrate --no-interaction;
-            php bin/console cache:clear --env=prod --no-debug;
-          "
+          rsync -avz --delete-after \
+          -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
+          ./ petrov120482@34.46.133.232:/var/www/nelmioCrud
+
+#      # Шаг 4: Установка зависимостей через composer
+#      - name: Install dependencies
+#        run: ssh -i ~/.ssh/id_rsa petrov120482@34.46.133.232 "cd /var/www/nelmioCrud && composer install --no-dev --optimize-autoloader"
+#
+#      # Шаг 5: Выполнение миграций базы данных
+#      - name: Run migrations
+#        run: ssh -i ~/.ssh/id_rsa petrov120482@34.46.133.232 "cd /var/www/nelmioCrud && php bin/console doctrine:migrations:migrate --no-interaction"
+#
+#      # Шаг 6: Очистка кеша Symfony
+#      - name: Clear Symfony cache
+#        run: ssh -i ~/.ssh/id_rsa petrov120482@34.46.133.232 "cd /var/www/nelmioCrud && php bin/console cache:clear"
+#
+#      # Шаг 7: Перезагрузка сервисов (Nginx, PHP-FPM)
+#      - name: Restart services
+#        run: ssh -i ~/.ssh/id_rsa petrov120482@34.46.133.232 "sudo systemctl restart php-fpm nginx"
