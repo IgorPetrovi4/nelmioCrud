@@ -3,7 +3,7 @@ name: Deploy to Server
 on:
   push:
     branches:
-      - master  # основная ветка
+      - master
 
 jobs:
   deploy:
@@ -18,15 +18,29 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.DEPLOY_KEY }}
 
+      - name: Check Variables
+        run: |
+          echo "DEPLOY_USER is: $DEPLOY_USER"
+          echo "SERVER_IP is: $SERVER_IP"
+          echo "DEPLOY_PATH is: $DEPLOY_PATH"
+        env:
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER || 'deployer' }}
+          SERVER_IP: ${{ secrets.SERVER_IP }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH || '/var/www/html' }}
+
       - name: Deploy to Server
         env:
           DEPLOY_USER: ${{ secrets.DEPLOY_USER || 'deployer' }}
           SERVER_IP: ${{ secrets.SERVER_IP }}
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH || '/var/www/html' }}
         run: |
-          ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$SERVER_IP "
+          ssh -o StrictHostKeyChecking=no "$DEPLOY_USER@$SERVER_IP" "
             cd $DEPLOY_PATH || exit;
-            git pull origin main || git clone git@github.com:IgorPetrovi4/nelmioCrud.git $DEPLOY_PATH;
+            if [ ! -d .git ]; then
+              git clone git@github.com:IgorPetrovi4/nelmioCrud.git $DEPLOY_PATH;
+            else
+              git pull origin main;
+            fi
             composer install --no-interaction --prefer-dist --optimize-autoloader;
             php bin/console doctrine:migrations:migrate --no-interaction;
             php bin/console cache:clear --env=prod --no-debug;
