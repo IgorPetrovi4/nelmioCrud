@@ -5,6 +5,7 @@ namespace App\Controller\Telegram;
 
 
 use App\ApiClient\Interface\TelegramClientInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,13 +14,15 @@ use Symfony\Component\Routing\Attribute\Route;
 class TelegramBotController extends AbstractController
 {
     public function __construct(
-        private readonly TelegramClientInterface $telegramClient
+        private readonly TelegramClientInterface $telegramClient,
+        private LoggerInterface $logger
     ) {}
 
     #[Route('/telegram/webhook', name: 'telegram_webhook', methods: ['POST'])]
     public function webhook(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
+        $this->logger->info('Webhook data', $data);
 
         // Проверяем, что получаем команду /start
         if (isset($data['message']['text']) && $data['message']['text'] === '/start') {
@@ -27,7 +30,7 @@ class TelegramBotController extends AbstractController
 
             // Запрашиваем API, если нужно (например, для получения информации)
             // Можно добавить логику запроса к вашему API тут
-
+            $this->logger->info('Request to API', ['chat_id' => $chatId]);
             $webAppUrl = 'https://endpointtools.com/webapp'; // Ваш публичный URL Web App
 
             // Формируем клавиатуру с Web App кнопкой

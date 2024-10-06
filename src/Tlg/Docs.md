@@ -26,6 +26,18 @@ https://api.telegram.org/bot7592709570:AAFcEz_iRgHLmwE9Tb7wsmebSFa_KHZJJ90/setWe
 /setmenubutton
 https://endpointtools.com/webapp
 
+https://endpointtools.com/send-webapp-link
+
+
+curl -X POST "https://api.telegram.org/bot7592709570:AAFcEz_iRgHLmwE9Tb7wsmebSFa_KHZJJ90/deleteWebhook"
+
+curl -X GET "https://api.telegram.org/bot7592709570:AAFcEz_iRgHLmwE9Tb7wsmebSFa_KHZJJ90/getUpdates"
+
+
+
+
+
+
 
 
 
