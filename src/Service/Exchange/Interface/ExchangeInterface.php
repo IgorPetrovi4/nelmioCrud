@@ -7,5 +7,5 @@ use App\Entity\User;
 
 interface ExchangeInterface
 {
-    public function exchangeRates(User $user, ?string $parameter): string;
+    public function exchangeRates(?User $user, ?string $parameter): string;
 }

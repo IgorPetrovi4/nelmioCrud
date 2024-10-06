@@ -16,7 +16,7 @@ class ExchangeRateService implements ExchangeInterface
         private NbuApiClientInterface $nbuApiClient
     ){ }
 
-    public function exchangeRates(User $user, ?string $parameter): string
+    public function exchangeRates(?User $user, ?string $parameter): string
     {
         $data = $this->nbuApiClient->getExchangeRates(self::URL_NBU_EXCHANGE_API);
 

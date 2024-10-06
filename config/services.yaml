@@ -63,3 +63,7 @@ services:
     App\ApiClient\TelegramClient:
         arguments:
             $botToken: '%telegram_bot_token%'
+
+    App\EventListener\ValidatorListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller_arguments }
