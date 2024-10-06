@@ -26,7 +26,7 @@ jobs:
       - name: Deploy via rsync
         run: |
           rsync -avz --delete-after \
-          --exclude=".env.local/" \  # Исключаем .env.local с символом слэша
+          --exclude=".env.local" \  # Исключаем .env.local из синхронизации
           -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
           ./ petrov120482@34.46.133.232:/var/www/nelmioCrud
     
