@@ -25,8 +25,7 @@ jobs:
       # Шаг 3: Деплой приложения с помощью rsync
       - name: Deploy via rsync
         run: |
-          rsync -avz --delete-after \
-          --exclude=".env.local" \  # Исключаем .env.local из синхронизации
+          rsync -avz \
           -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
           ./ petrov120482@34.46.133.232:/var/www/nelmioCrud
     
