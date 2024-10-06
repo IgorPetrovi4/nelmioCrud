@@ -10,7 +10,12 @@
 <body>
 <div class="container">
     <h1>Currency Converter</h1>
+
     <form id="currency-form">
+        <div class="form-group">
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" value="50" required />
+        </div>
         <div class="form-group">
             <label for="from-currency">From Currency:</label>
             <select id="from-currency" required>
@@ -27,35 +32,12 @@
                 {% endfor %}
             </select>
         </div>
-        <div class="form-group">
-            <label for="amount">Amount:</label>
-            <input type="number" id="amount" value="50" required />
-        </div>
         <button type="submit" class="btn">Convert</button>
     </form>
     <div id="result" class="result-box">
         <p>Converted Amount: <span id="converted-amount">0.00</span> <span id="result-currency">UAH</span></p>
     </div>
 </div>
-
-<script>
-    document.getElementById('currency-form').addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        // Получаем выбранные значения
-        const toCurrency = document.getElementById('to-currency').value;
-        const amount = document.getElementById('amount').value;
-
-        // Ваша логика для получения результата через API или другие вычисления
-
-        // Примерно как будет обновляться результат (здесь '100' как пример конвертированного значения)
-        //const convertedAmount = 100; // Пример результата, это должно быть значение из вашего API
-
-        // Обновляем результат на странице
-        document.getElementById('converted-amount').textContent = convertedAmount;
-        document.getElementById('result-currency').textContent = toCurrency;
-    });
-</script>
 </body>
+<script src="{{ asset('tlg/script.js') }}"></script>
 </html>
-
