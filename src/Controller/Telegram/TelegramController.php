@@ -20,7 +20,7 @@ class TelegramController extends AbstractController
     public function sendWebAppLink(): JsonResponse
     {
         $chatId = 5485716556; // Ваш chat_id
-        $webAppUrl = 'https://2395-5-59-171-221.ngrok-free.app/webapp'; // Ссылка на маршрут Symfony
+        $webAppUrl = 'https://endpointtools.com/webapp'; // Ссылка на маршрут Symfony
 
         $keyboard = [
             [

@@ -28,7 +28,7 @@ class TelegramBotController extends AbstractController
             // Запрашиваем API, если нужно (например, для получения информации)
             // Можно добавить логику запроса к вашему API тут
 
-            $webAppUrl = 'https://2395-5-59-171-221.ngrok-free.app/webapp'; // Ваш публичный URL Web App
+            $webAppUrl = 'https://endpointtools.com/webapp'; // Ваш публичный URL Web App
 
             // Формируем клавиатуру с Web App кнопкой
             $keyboard = [
