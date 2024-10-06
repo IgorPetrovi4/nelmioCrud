@@ -33,6 +33,9 @@ curl -X POST "https://api.telegram.org/bot7592709570:AAFcEz_iRgHLmwE9Tb7wsmebSFa
 
 curl -X GET "https://api.telegram.org/bot7592709570:AAFcEz_iRgHLmwE9Tb7wsmebSFa_KHZJJ90/getUpdates"
 
+curl -X POST "https://api.telegram.org/bot7592709570:AAFcEz_iRgHLmwE9Tb7wsmebSFa_KHZJJ90/setWebhook?url=https://endpointtools.com/telegram/webhook"
+
+
 
 
 

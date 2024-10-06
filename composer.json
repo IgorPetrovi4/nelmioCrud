@@ -23,6 +23,7 @@
         "symfony/framework-bundle": "7.0.*",
         "symfony/http-client": "7.0.*",
         "symfony/intl": "7.0.*",
+        "symfony/monolog-bundle": "^3.10",
         "symfony/runtime": "7.0.*",
         "symfony/security-core": "7.0.*",
         "symfony/serializer": "7.0.*",
