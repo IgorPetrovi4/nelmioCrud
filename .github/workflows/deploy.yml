@@ -26,8 +26,10 @@ jobs:
       - name: Deploy via rsync
         run: |
           rsync -avz --delete-after \
+          --exclude '.env.local' \ 
           -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
           ./ petrov120482@34.46.133.232:/var/www/nelmioCrud
+
 
       # Шаг 4: Установка зависимостей через composer
       - name: Install dependencies
