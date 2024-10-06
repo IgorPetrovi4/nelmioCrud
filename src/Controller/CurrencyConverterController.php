@@ -22,9 +22,7 @@ class CurrencyConverterController extends AbstractController
 {
     public function __construct(
         private readonly CurrencyConversionServiceInterface $currencyConversionService,
-    )
-    {
-    }
+    ){ }
 
     #[Route('/api/currency/convert', name: 'app_currency_converter_convert', methods: ['GET'])]
     #[OA\Response(
