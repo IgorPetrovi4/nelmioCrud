@@ -42,6 +42,6 @@ jobs:
       - name: Clear Symfony cache
         run: ssh -i ~/.ssh/id_rsa petrov120482@34.46.133.232 "cd /var/www/nelmioCrud && php bin/console cache:clear"
 
-      # Шаг 7: Перезагрузка сервисов (Nginx, PHP-FPM)
-      - name: Restart services
-        run: ssh -i ~/.ssh/id_rsa petrov120482@34.46.133.232 "/home/petrov120482/restart_services.sh"
+#      # Шаг 7: Перезагрузка сервисов (Nginx, PHP-FPM)
+#      - name: Restart services
+#        run: ssh -i ~/.ssh/id_rsa petrov120482@34.46.133.232 "/home/petrov120482/restart_services.sh"
