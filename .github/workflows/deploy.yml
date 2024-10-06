@@ -44,4 +44,4 @@ jobs:
 
       # Шаг 7: Перезагрузка сервисов (Nginx, PHP-FPM)
       - name: Restart services
-        run: ssh -i ~/.ssh/id_rsa petrov120482@34.46.133.232 "sudo systemctl restart php-fpm nginx"
+        run: ssh -i ~/.ssh/id_rsa petrov120482@34.46.133.232 "systemctl --user restart php-fpm nginx"
