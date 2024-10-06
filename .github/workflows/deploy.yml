@@ -26,10 +26,10 @@ jobs:
       - name: Deploy via rsync
         run: |
           rsync -avz --delete-after \
-          --exclude '.env.local' \  # Исключаем .env.local из синхронизации
+          --exclude=".env.local/" \  # Исключаем .env.local с символом слэша
           -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
           ./ petrov120482@34.46.133.232:/var/www/nelmioCrud
-      
+    
 
       # Шаг 4: Установка зависимостей через composer
       - name: Install dependencies
