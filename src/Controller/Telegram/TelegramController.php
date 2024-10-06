@@ -5,6 +5,7 @@ namespace App\Controller\Telegram;
 
 
 use App\ApiClient\Interface\TelegramClientInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Attribute\Route;
@@ -13,7 +14,8 @@ class TelegramController extends AbstractController
 {
 
     public function __construct(
-        private readonly TelegramClientInterface $telegramClient
+        private readonly TelegramClientInterface $telegramClient,
+        private LoggerInterface $logger
     ) {}
 
     #[Route('/send-webapp-link', name: 'send_webapp_link', methods: ['GET'])]
@@ -21,7 +23,8 @@ class TelegramController extends AbstractController
     {
         $chatId = 5485716556; // Ваш chat_id
         $webAppUrl = 'https://endpointtools.com/webapp'; // Ссылка на маршрут Symfony
-
+        $this->logger->info('Request to API', ['chat_id' => $chatId]);
+        $this->logger->info('WebApp URL', ['url' => $webAppUrl]);
         $keyboard = [
             [
                 [

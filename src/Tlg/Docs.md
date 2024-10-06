@@ -12,19 +12,11 @@ For a description of the Bot API, see this page: https://core.telegram.org/bots/
 /setdomain
 https://endpointtools.com/
 
-https://api.telegram.org/bot7592709570:AAFcEz_iRgHLmwE9Tb7wsmebSFa_KHZJJ90/getUpdates
-http://localhost:8015/send-webapp-link
-https://api.telegram.org/bot7592709570:AAFcEz_iRgHLmwE9Tb7wsmebSFa_KHZJJ90/setWebhook?url=https://2395-5-59-171-221.ngrok-free.app/telegram/webhook
-
-
-/setmenubutton
-https://2395-5-59-171-221.ngrok-free.app/webapp
-затем название кнопки
-
-https://endpointtools.com/
 https://api.telegram.org/bot7592709570:AAFcEz_iRgHLmwE9Tb7wsmebSFa_KHZJJ90/setWebhook?url=https://endpointtools.com/telegram/webhook
+
 /setmenubutton
 https://endpointtools.com/webapp
+затем название кнопки
 
 https://endpointtools.com/send-webapp-link
 
