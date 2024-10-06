@@ -13,7 +13,7 @@ document.getElementById('currency-form').addEventListener('submit', function(eve
     fetch(`https://endpointtools.com/api/currency/convert?fromCurrency=${fromCurrency}&toCurrency=${toCurrency}&amount=${amount}`, {
         method: 'GET',
         headers: {
-            'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MjgyMzQzNjgsImV4cCI6MTcyODIzNzk2OCwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6Im1haWwxQGV4YW1wbGUuY29tIn0.KkkNIaQwzFfJEITAcWZq3ajrOqSbfIqnz82mFI1HZCOrUBYIKIW30SUqxJWjVlZiHPd1UPWklWlOGg94ley7W0yod6H36wa3C_aIWbs8ltQGDVMd0LWg331pktGMF_wHBIbWioxlKdW9ZYJSONcVd8dc_TR7p4B_1LVMgkCrxW1pbANGG1tsdSyo1hh4UT2k_HBhp3enfHZ4ckXaxow0iGFsCar6z8s2Q9Eg8Qan7JO36tt7JG4npUDwNiDRkjnz0i0LYzos-vNS06BaDwulWhh0wpp8DZ1cLzhdm7bW-W8n72PUsOR0Ikei-40W56Y6yT8a-XwrNWTrh48J6NSzrQ',
+            'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MjgyMzU0NzQsImV4cCI6MTcyODIzOTA3NCwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6Im1haWwxQGV4YW1wbGUuY29tIn0.LOsKrkxNJC1AlpyQaxhqWeaoSxXuczXjzZkbm19jrIrRNWx9lRgEZgs2slUtpBC8V_szkxwCu-C3nKoyX6UwDg5Gbdg8y7k0480hUzYWxHo7HN-06DqJT-dd-R9kSzSPRZlR5tiy4kNmtyfMHxE4NYNfIKRf8x30OTzlugwd0Czu4g_lXmOtHKpE6sH-8gl4w19tuAy1LXv0Q48_5C1DOjhbKnJkAhF6B0tbx5Xb3YjMuF7kOLOxTDEdeiJkGI8X1emSiR3hJUPPaueQq9PV2YD3GzgLo5p225yoL-FDo463c1NyZ4AoBsLXP6cdzOMI3SoOKF5_91yCF0lZIbqh2A',
             'accept': 'application/json'
         }
     })
