@@ -15,7 +15,7 @@ class TelegramBotController extends AbstractController
 {
     public function __construct(
         private readonly TelegramClientInterface $telegramClient,
-        private LoggerInterface $logger
+        private readonly LoggerInterface $logger
     ) {}
 
     #[Route('/telegram/webhook', name: 'telegram_webhook', methods: ['POST'])]

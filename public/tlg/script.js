@@ -13,7 +13,7 @@ document.getElementById('salary-form').addEventListener('submit', function(event
     fetch(`https://endpointtools.com/api/salary/user/${userId}/calculate?percentage=${percentage}&currency=${currency}`, {
         method: 'GET',
         headers: {
-            'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MjgyMDkxMDgsImV4cCI6MTcyODIxMjcwOCwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6Im1haWwxQGV4YW1wbGUuY29tIn0.FT4izq4a4_dWBqDSxWo3tGCSu2U33RT45kosyStOrS0aZYNufwK2TRD2KryBo2UTmoD84Vq2WcKG6IpPEK_g_8WBXyVrQpTs8CKYMlBr5FIo5wjGceEUOvScVss5zJMte85AwMlL1c74vYL0lUSVcDYnsLYD1qMMbhTu0YKoDDn3z8L3M3FRb8-fvmv9K2UPCVzDPqXbfrDdi-tploClDeHPnSfFUnwld2ALpuPNlddv8AyJNF8zUMgbQD6DKmjyLGsM5nEQhRUB-8fuaFbo0bnc9qjLDm15gYA-a2cS4wZw2ow9lVGJjXhKeOiE4fb3bDWWH5TFZgjY9JzQW7RsJA',
+            'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MjgyMjAyNDIsImV4cCI6MTcyODIyMzg0Miwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6Im1haWwxQGV4YW1wbGUuY29tIn0.3QYYg5lbEGudwa_zVokXKLQXJhLPXrEUHTpukaXtUxraypu5EgpOVoxsZPqgMOapvuQOUsPcG_fyj8Ifr2vT0S-rM8UG-OqMJjQxt3XSSp5JjkMIrJa71eCQhkF9cNwUep-BRuXXcPGHAN_ilS-egkoFrVWnuMjggdCBJML_9dMiH1BmjYCsjI20Kleui5SmsdL2DXux_yZb8f1WFi-le_3KEhtoZ9mW23L5Z2ZN1vDtLOwrc74KBnVe2Zxfb9OGTxxsYuXznYj8lwaHU6bU9Uj_vSH_B_XLSO1DA2A11CF5e8-1SwMLjxaexWSBmbTYwe3ygxm1xz1-bwrjLlD-3Q',
             'accept': 'application/json'
         }
     })
