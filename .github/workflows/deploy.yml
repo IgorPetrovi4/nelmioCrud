@@ -20,28 +20,25 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.DEPLOY_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H 34.46.133.232 >> ~/.ssh/known_hosts
+          ssh-keyscan -H 34.172.76.95 >> ~/.ssh/known_hosts
 
       # Шаг 3: Деплой приложения с помощью rsync
       - name: Deploy via rsync
         run: |
           rsync -avz \
           -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
-          ./ petrov120482@34.46.133.232:/var/www/nelmioCrud
+          ./ petrov120482@34.172.76.95:/var/www/nelmioCrud
     
 
       # Шаг 4: Установка зависимостей через composer
       - name: Install dependencies
-        run: ssh -i ~/.ssh/id_rsa petrov120482@34.46.133.232 "cd /var/www/nelmioCrud && composer install --no-dev --optimize-autoloader"
+        run: ssh -i ~/.ssh/id_rsa petrov120482@34.172.76.95 "cd /var/www/nelmioCrud && composer install --no-dev --optimize-autoloader"
 
       # Шаг 5: Выполнение миграций базы данных
       - name: Run migrations
-        run: ssh -i ~/.ssh/id_rsa petrov120482@34.46.133.232 "cd /var/www/nelmioCrud && php bin/console doctrine:database:create --if-not-exists  && php bin/console doctrine:migrations:migrate --no-interaction"
+        run: ssh -i ~/.ssh/id_rsa petrov120482@34.172.76.95 "cd /var/www/nelmioCrud && php bin/console doctrine:database:create --if-not-exists  && php bin/console doctrine:migrations:migrate --no-interaction"
 
       # Шаг 6: Очистка кеша Symfony
       - name: Clear Symfony cache
-        run: ssh -i ~/.ssh/id_rsa petrov120482@34.46.133.232 "cd /var/www/nelmioCrud && php bin/console cache:clear"
+        run: ssh -i ~/.ssh/id_rsa petrov120482@34.172.76.95 "cd /var/www/nelmioCrud && php bin/console cache:clear"
 
-#      # Шаг 7: Перезагрузка сервисов (Nginx, PHP-FPM)
-#      - name: Restart services
-#        run: ssh -i ~/.ssh/id_rsa petrov120482@34.46.133.232 "/home/petrov120482/restart_services.sh"
