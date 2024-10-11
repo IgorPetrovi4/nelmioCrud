@@ -38,7 +38,8 @@ readonly class TelegramClient implements TelegramClientInterface
                 'text' => $message,
                 'reply_markup' => [
                     'inline_keyboard' => $keyboard
-                ]
+                ],
+                'cache_time' => 0,
             ]
         ]);
 
