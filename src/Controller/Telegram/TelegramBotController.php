@@ -37,14 +37,14 @@ class TelegramBotController extends AbstractController
             $keyboard = [
                 [
                     [
-                        'text' => 'Открыть калькулятор зарплаты',
+                        'text' => 'Открыть валютный калькулятор',
                         'web_app' => ['url' => $webAppUrl]
                     ]
                 ]
             ];
 
             // Отправляем сообщение с кнопкой Web App пользователю
-            $this->telegramClient->sendMessage($chatId, 'Добро пожаловать! Нажмите на кнопку для расчета зарплаты:', $keyboard);
+            $this->telegramClient->sendMessage($chatId, 'Добро пожаловать! Это калькулятор валют, основанный на данных Национального банка. Нажмите на кнопку для расчета:', $keyboard);
         }
 
         // Возвращаем успешный ответ для Telegram

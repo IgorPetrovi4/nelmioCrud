@@ -32,6 +32,9 @@ curl -X GET "https://api.telegram.org/bot7592709570:AAFcEz_iRgHLmwE9Tb7wsmebSFa_
 
 
 
+/mybots
+
+
 
 
 
