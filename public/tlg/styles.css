@@ -72,7 +72,7 @@ input:focus, select:focus {
     background-color: #f8f9fa;
     border-radius: 6px;
     border: 1px solid #ccc;
-    text-align: left;
+    text-align: center;
     font-size: 18px;
 }
 
