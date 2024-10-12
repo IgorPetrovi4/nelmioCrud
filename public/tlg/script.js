@@ -39,8 +39,8 @@ function fetchConversionData() {
 
 // Function to display only the converted amount
 function displayConvertedAmount(data, toCurrency) {
-    const convertedAmount = typeof data.convertedAmount !== 'undefined'
-        ? data.convertedAmount.toFixed(2)  // Round the result to 2 decimal places
+    const convertedAmount = (typeof data.convertedAmount !== 'undefined')
+        ? (toCurrency === 'BTC' ? data.convertedAmount : data.convertedAmount.toFixed(2))
         : '0.00';
 
     // Update the result block
