@@ -13,11 +13,10 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class TelegramBotController extends AbstractController
 {
-
     public function __construct(
         private readonly TelegramClientInterface $telegramClient,
         private readonly LoggerInterface $logger,
-        private readonly bool $menuButton
+        private readonly  bool $menuButton
     ) {}
 
     #[Route('/telegram/webhook', name: 'telegram_webhook', methods: ['POST'])]
@@ -27,18 +26,12 @@ class TelegramBotController extends AbstractController
         $this->logger->info('Webhook data', $data);
 
         $chatId = $data['message']['chat']['id'] ?? null;
-        $this->logger->info('Processing webhook', ['chat_id' => $chatId, 'menu_button' => $this->menuButton]);
-        if ($chatId !== null) {
 
+        if ($chatId !== null) {
             if ($this->menuButton) {
-                $this->renderChat($request);
+                $this->renderChat($data);
             } else {
-                // Используем метод setMenuButton из клиента
-                try {
-                    $this->telegramClient->setMenuButton($chatId);
-                } catch (\Exception $e) {
-                    $this->logger->error('Error setting menu button', ['exception' => $e]);
-                }
+                $this->handleAutoOpen($data);
             }
         } else {
             $this->logger->error('Chat ID not found in request data', $data);
@@ -48,19 +41,14 @@ class TelegramBotController extends AbstractController
         return new JsonResponse(['status' => 'success']);
     }
 
-    private function renderChat(Request $request): void
+    private function renderChat(array $data): void
     {
-        $data = json_decode($request->getContent(), true);
-        $this->logger->info('Webhook data', $data);
-
-        // Проверяем, что получаем команду /start
         if (isset($data['message']['text']) && $data['message']['text'] === '/start') {
             $chatId = $data['message']['chat']['id'];
 
             $this->logger->info('Processing /start command', ['chat_id' => $chatId]);
             $webAppUrl = 'https://endpointtools.com/webapp';
 
-            // Формируем клавиатуру с Web App кнопкой
             $keyboard = [
                 [
                     [
@@ -70,16 +58,38 @@ class TelegramBotController extends AbstractController
                 ]
             ];
 
-            // Отправляем сообщение с кнопкой Web App пользователю
-            try {
-                $this->telegramClient->sendMessage(
-                    $chatId,
-                    'Добро пожаловать! Это калькулятор валют, основанный на данных Национального банка. Нажмите на кнопку для расчета:',
-                    $keyboard
-                );
-            } catch (\Exception $e) {
-                $this->logger->error('Error sending message', ['exception' => $e]);
-            }
+            $this->telegramClient->sendMessage(
+                $chatId,
+                'Добро пожаловать! Это калькулятор валют, основанный на данных Национального банка. Нажмите на кнопку для расчета:',
+                $keyboard
+            );
+        }
+    }
+
+    private function handleAutoOpen(array $data): void
+    {
+        if (isset($data['message']['text']) && strpos($data['message']['text'], '/start auto_open') === 0) {
+            $chatId = $data['message']['chat']['id'];
+            $webAppUrl = 'https://endpointtools.com/webapp';
+
+            $keyboard = [
+                [
+                    [
+                        'text' => 'Открыть валютный калькулятор',
+                        'web_app' => ['url' => $webAppUrl]
+                    ]
+                ]
+            ];
+
+            // Отправляем сообщение с кнопкой Web App
+            $this->telegramClient->sendMessage(
+                $chatId,
+                'Открываем калькулятор валют...',
+                $keyboard
+            );
+
+            // Дополнительно можно попытаться автоматически открыть Web App с помощью метода answerWebAppQuery
+            // Но это возможно только в ответ на нажатие инлайн-кнопки, а не при входе в бота
         }
     }
 }

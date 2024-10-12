@@ -16,19 +16,4 @@ interface TelegramClientInterface
      */
     public function sendMessage(int $chatId, string $message, array $keyboard = []): array;
 
-
-    /**
-     * Устанавливает кнопку меню для чата в Telegram
-     *
-     * @param int $chatId Идентификатор чата в Telegram
-     * @return array Ответ от API в формате массива
-     */
-    public function setMenuButton(int $chatId): array;
-
-    /**
-     * Возвращает токен бота
-     *
-     * @return string Токен бота
-     */
-    public function getBotToken(): string;
 }

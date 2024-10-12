@@ -38,32 +38,4 @@ readonly class TelegramClient implements TelegramClientInterface
         return $response->toArray();
     }
 
-    /**
-     * @throws TransportExceptionInterface
-     */
-    public function setMenuButton(int $chatId): array
-    {
-        $url = sprintf('https://api.telegram.org/bot%s/setChatMenuButton', $this->botToken);
-        $this->logger->info('Request to setChatMenuButton API', ['url' => $url]);
-
-        $response = $this->client->request('POST', $url, [
-            'json' => [
-                'chat_id' => $chatId,
-                'menu_button' => [
-                    'type' => 'web_app',
-                    'text' => 'Открыть валютный калькулятор',
-                    'web_app' => ['url' => 'https://endpointtools.com/webapp']
-                ],
-            ],
-        ]);
-
-        $this->logger->info('Menu button set', $response->toArray());
-
-        return $response->toArray();
-    }
-
-    public function getBotToken(): string
-    {
-        return $this->botToken;
-    }
 }
