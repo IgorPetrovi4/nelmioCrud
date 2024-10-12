@@ -1,9 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Service\Exchange;
 
 use App\ApiClient\Interface\NbuApiClientInterface;
+use App\ApiClient\CoinGeckoApiClient;
 use App\Entity\User;
 use App\Service\Exchange\Interface\ExchangeInterface;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -16,14 +18,21 @@ class ExchangeRateService implements ExchangeInterface
 
     public function __construct(
         private NbuApiClientInterface $nbuApiClient,
-        private CacheInterface $cache
-    ) { }
+        private CoinGeckoApiClient    $coinGeckoApiClient,
+        private CacheInterface        $cache
+    )
+    {
+    }
 
     public function exchangeRates(?User $user, ?string $parameter): string
     {
+        if ($parameter === 'BTC') {
+            return $this->getBtcExchangeRate();
+        }
+
         $cacheKey = 'exchange_rates_' . $parameter;
 
-        $data = $this->cache->get($cacheKey, function (ItemInterface $item) {
+        $data = $this->cache->get($cacheKey, function (ItemInterface $item){
             $item->expiresAfter(self::CACHE_TTL);
             return $this->nbuApiClient->getExchangeRates(self::URL_NBU_EXCHANGE_API);
         });
@@ -40,6 +49,17 @@ class ExchangeRateService implements ExchangeInterface
             return "Exchange rate for {$parameter} not found";
         }
 
-        return (string) $exchangeRate;
+        return (string)$exchangeRate;
     }
+
+    private function getBtcExchangeRate(): string
+    {
+        $cacheKey = 'btc_usd_rate';
+
+        return $this->cache->get($cacheKey, function (ItemInterface $item) {
+            $item->expiresAfter(600); // 10 минут в секундах
+            return (string) $this->coinGeckoApiClient->getBtcToUsd();
+        });
+    }
+
 }

@@ -13,7 +13,7 @@ use OpenApi\Attributes as OA;
 )]
 class CurrencyConvertRequest
 {
-    public const CURRENCY_CHOICES = ["EUR", "UAH", "USD", "RUB"];
+    public const CURRENCY_CHOICES = ["EUR", "UAH", "USD", "RUB", "BTC"];
     #[OA\Property(
         description: "The currency to convert from",
         example: "USD"
