@@ -35,7 +35,7 @@ class CurrencyConvertRequest
         example: 100
     )]
     #[Assert\NotBlank(message: "Amount should not be blank.")]
-    #[Assert\PositiveOrZero(message: "Amount must be zero or a positive number.")]
+    //#[Assert\PositiveOrZero(message: "Amount must be zero or a positive number.")]
     private float $amount;
 
     public function getFromCurrency(): string

@@ -8,3 +8,9 @@ For a description of the Bot API, see this page: https://core.telegram.org/bots/
 
 
 https://api.telegram.org/bot7547890682:AAFgV3rs6LkvHqeFMcXYMSNp5SGMD6A917A/setWebhook?url=https://endpointtools.com/webhook/newapp
+
+
+https://api.telegram.org/bot7547890682:AAFgV3rs6LkvHqeFMcXYMSNp5SGMD6A917A/setChatMenuButton?menu_button={"type":"web_app","text":"QuickConvApp","web_app":{"url":"https://t.me/QuickConvertBot/QuickConvApp"}}
+
+
+You can now use QuickConvApp as the short_name parameter value in Bot API. Your web app link is t.me/QuickConvertBot/QuickConvApp. Open it to start developing your web app!
