@@ -5,33 +5,25 @@ namespace App\ApiClient;
 
 use App\ApiClient\Interface\TelegramClientInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 readonly class TelegramClient implements TelegramClientInterface
 {
-
     public function __construct(
         private HttpClientInterface $client,
         private LoggerInterface $logger,
-        private  string $botToken
-    ){ }
+        private string $botToken
+    ) { }
 
     /**
      * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws DecodingExceptionInterface
-     * @throws ClientExceptionInterface
      */
     public function sendMessage(int $chatId, string $message, array $keyboard = []): array
     {
         $url = sprintf('https://api.telegram.org/bot%s/sendMessage', $this->botToken);
-        $this->logger->info('Request to API', ['url' => $url]);
+        $this->logger->info('Request to sendMessage API', ['url' => $url]);
+
         $response = $this->client->request('POST', $url, [
             'json' => [
                 'chat_id' => $chatId,
@@ -44,5 +36,34 @@ readonly class TelegramClient implements TelegramClientInterface
         ]);
 
         return $response->toArray();
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     */
+    public function setMenuButton(int $chatId): array
+    {
+        $url = sprintf('https://api.telegram.org/bot%s/setChatMenuButton', $this->botToken);
+        $this->logger->info('Request to setChatMenuButton API', ['url' => $url]);
+
+        $response = $this->client->request('POST', $url, [
+            'json' => [
+                'chat_id' => $chatId,
+                'menu_button' => [
+                    'type' => 'web_app',
+                    'text' => 'Открыть валютный калькулятор',
+                    'web_app' => ['url' => 'https://endpointtools.com/webapp']
+                ],
+            ],
+        ]);
+
+        $this->logger->info('Menu button set', $response->toArray());
+
+        return $response->toArray();
+    }
+
+    public function getBotToken(): string
+    {
+        return $this->botToken;
     }
 }
