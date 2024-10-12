@@ -13,15 +13,12 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class TelegramBotController extends AbstractController
 {
-    private bool $menuButton;
 
     public function __construct(
         private readonly TelegramClientInterface $telegramClient,
         private readonly LoggerInterface $logger,
-        bool $menuButton // Injected via services.yaml
-    ) {
-        $this->menuButton = $menuButton;
-    }
+        private readonly bool $menuButton
+    ) {}
 
     #[Route('/telegram/webhook', name: 'telegram_webhook', methods: ['POST'])]
     public function webhook(Request $request): JsonResponse
@@ -30,8 +27,9 @@ class TelegramBotController extends AbstractController
         $this->logger->info('Webhook data', $data);
 
         $chatId = $data['message']['chat']['id'] ?? null;
-
+        $this->logger->info('Processing webhook', ['chat_id' => $chatId, 'menu_button' => $this->menuButton]);
         if ($chatId !== null) {
+
             if ($this->menuButton) {
                 $this->renderChat($request);
             } else {
