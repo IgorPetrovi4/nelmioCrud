@@ -5,5 +5,5 @@ namespace App\ApiClient\Interface;
 
 interface NbuApiClientInterface
 {
-    public function getExchangeRates(string $endpoint): array;
+    public function getExchangeRates(): array;
 }

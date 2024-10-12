@@ -13,28 +13,24 @@ use Symfony\Contracts\Cache\ItemInterface;
 
 class ExchangeRateService implements ExchangeInterface
 {
-    const URL_NBU_EXCHANGE_API = 'NBUStatService/v1/statdirectory/exchange';
-    const CACHE_TTL = 14400; // 4 hours in seconds
+    const CACHE_TTL_NBU = 14400; // 4 hours in seconds
+    const CACHE_TTL_BTC = 300; // 5 minutes in seconds
 
     public function __construct(
-        private NbuApiClientInterface $nbuApiClient,
-        private CoinGeckoApiClient    $coinGeckoApiClient,
-        private CacheInterface        $cache
+        private readonly NbuApiClientInterface $nbuApiClient,
+        private readonly CoinGeckoApiClient    $coinGeckoApiClient,
+        private readonly CacheInterface $cache
     )
     {
     }
 
     public function exchangeRates(?User $user, ?string $parameter): string
     {
-        if ($parameter === 'BTC') {
-            return $this->getBtcExchangeRate();
-        }
-
         $cacheKey = 'exchange_rates_' . $parameter;
 
         $data = $this->cache->get($cacheKey, function (ItemInterface $item){
-            $item->expiresAfter(self::CACHE_TTL);
-            return $this->nbuApiClient->getExchangeRates(self::URL_NBU_EXCHANGE_API);
+            $item->expiresAfter(self::CACHE_TTL_NBU);
+            return $this->nbuApiClient->getExchangeRates();
         });
 
         $exchangeRate = 0;
@@ -52,13 +48,13 @@ class ExchangeRateService implements ExchangeInterface
         return (string)$exchangeRate;
     }
 
-    private function getBtcExchangeRate(): string
+    public function getBtcExchangeRate(string $currency): string
     {
-        $cacheKey = 'btc_uah_rate';
+        $cacheKey = 'btc_uah_rate_'. $currency;
 
-        return $this->cache->get($cacheKey, function (ItemInterface $item) {
-            $item->expiresAfter(600); // 10 минут в секундах
-            return (string) $this->coinGeckoApiClient->getBtcToUah();
+        return $this->cache->get($cacheKey, function (ItemInterface $item) use ($currency) {
+            $item->expiresAfter(self::CACHE_TTL_BTC);
+            return (string) $this->coinGeckoApiClient->getBtcToСurrency($currency);
         });
     }
 
