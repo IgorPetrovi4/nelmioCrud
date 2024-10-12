@@ -54,11 +54,11 @@ class ExchangeRateService implements ExchangeInterface
 
     private function getBtcExchangeRate(): string
     {
-        $cacheKey = 'btc_usd_rate';
+        $cacheKey = 'btc_uah_rate';
 
         return $this->cache->get($cacheKey, function (ItemInterface $item) {
             $item->expiresAfter(600); // 10 минут в секундах
-            return (string) $this->coinGeckoApiClient->getBtcToUsd();
+            return (string) $this->coinGeckoApiClient->getBtcToUah();
         });
     }
 

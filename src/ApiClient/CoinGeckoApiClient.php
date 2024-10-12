@@ -14,18 +14,32 @@ class CoinGeckoApiClient
     )
     {
     }
-
-    public function getBtcToUsd(): float
+    public function getBtcToСurrency(string $currency): float
     {
         $response = $this->client->request('GET', self::BASE_URL, [
             'query' => [
                 'ids' => 'bitcoin',
-                'vs_currencies' => 'usd',
+                'vs_currencies' => $currency,
             ]
         ]);
 
         $data = $response->toArray();
 
-        return $data['bitcoin']['usd'] ?? 0.0;
+        return $data['bitcoin'][$currency] ?? 0.0;
     }
+
+    public function getBtcToUah(): float
+    {
+        $response = $this->client->request('GET', self::BASE_URL, [
+            'query' => [
+                'ids' => 'bitcoin',
+                'vs_currencies' => 'uah',
+            ]
+        ]);
+
+        $data = $response->toArray();
+
+        return $data['bitcoin']['uah'] ?? 0.0;
+    }
+
 }
