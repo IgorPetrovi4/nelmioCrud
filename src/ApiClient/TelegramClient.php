@@ -17,6 +17,7 @@ readonly class TelegramClient implements TelegramClientInterface
     ) { }
 
     /**
+     * Отправляет сообщение с инлайн-кнопками (например, для Web App).
      * @throws TransportExceptionInterface
      */
     public function sendMessage(int $chatId, string $message, array $keyboard = []): array
@@ -38,4 +39,27 @@ readonly class TelegramClient implements TelegramClientInterface
         return $response->toArray();
     }
 
+    /**
+     * Устанавливает глобальную кнопку Web App в меню бота.
+     * @throws TransportExceptionInterface
+     */
+    public function setWebAppMenuButton(string $webAppUrl): array
+    {
+        $url = sprintf('https://api.telegram.org/bot%s/setChatMenuButton', $this->botToken);
+        $this->logger->info('Setting Web App menu button', ['url' => $url]);
+
+        $response = $this->client->request('POST', $url, [
+            'json' => [
+                'menu_button' => [
+                    'type' => 'web_app',
+                    'text' => 'Открыть приложение',
+                    'web_app' => [
+                        'url' => $webAppUrl
+                    ]
+                ]
+            ]
+        ]);
+
+        return $response->toArray();
+    }
 }
