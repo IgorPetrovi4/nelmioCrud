@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Converter</title>
+    <link rel="stylesheet" href="{{ asset('tlg/styles.css') }}">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+<div class="container">
+    <h1>Currency Converter</h1>
+
+    <form id="currency-form">
+        <div class="form-group">
+            <label for="amount">Amount:</label>
+            <input type="text" id="amount" value="1" required pattern="\d{1,30}(\.\d{1,30})?" />
+        </div>
+        <div class="form-group">
+            <label for="from-currency">From Currency:</label>
+            <select id="from-currency" required>
+                {% for currency in currencyChoices %}
+                    <option value="{{ currency }}" {% if currency == 'EUR' %}selected{% endif %}>{{ currency }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+
+        <div class="form-group">
+            <button type="button" id="swap-currencies" class="swap-button">⬆⬇</button>
+        </div>
+
+        <div class="form-group">
+            <label for="to-currency">To Currency:</label>
+            <select id="to-currency" required>
+                {% for currency in currencyChoices %}
+                    <option value="{{ currency }}" {% if currency == 'UAH' %}selected{% endif %}>{{ currency }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn">Convert</button>
+    </form>
+    <div id="result" class="result-box">
+        <p><span id="converted-amount">0.00</span> <span id="result-currency">UAH</span></p>
+    </div>
+</div>
+</body>
+<script>
+    const apiToken = '{{ api_jwt }}'
+</script>
+<script src="{{ asset('tlg/script.js') }}"></script>
+</html>

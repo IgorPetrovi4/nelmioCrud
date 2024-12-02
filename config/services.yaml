@@ -1,0 +1,74 @@
+parameters:
+    nbu_api.base_url: '%env(NBU_API_BASE_URL)%'
+    telegram_bot_token: '%env(TELEGRAM_BOT_TOKEN)%'
+    telegram_menu_button: '%env(TELEGRAM_MENU_BUTTON)%'
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    App\EventListener\ExceptionHandler:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
+
+    App\ValueResolver\DeserializeValueResolver:
+        arguments:
+            $serializer: '@serializer'
+            $validator: '@validator'
+            $logger: '@logger'
+        tags:
+            - { name: controller.value_resolver, priority: 100 }
+
+    App\Mapper\EntityMapperInterface:
+        alias: App\Mapper\EntityMapper
+        public: true
+
+    App\Mapper\EntityMapper:
+        autowire: true
+        autoconfigure: false
+
+    App\ValueResolver\QueryParamValueResolver:
+        arguments:
+            $validator: '@validator'
+            $logger: '@logger'
+        tags:
+            - { name: controller.value_resolver, priority: 90 }
+
+    App\EventListener\TimestampableListener:
+        tags:
+            - { name: doctrine.event_listener, event: postPersist }
+            - { name: doctrine.event_listener, event: postUpdate }
+            - { name: doctrine.event_listener, event: preRemove }
+
+    App\Service\SalaryCalculate\Interface\SalaryCalculatorInterface $averageSalaryCalculator:
+        alias: App\Service\SalaryCalculate\AverageSalaryCalculator
+    App\Service\SalaryCalculate\Interface\SalaryCalculatorInterface $salaryIncreaseCalculator:
+        alias: App\Service\SalaryCalculate\SalaryIncreaseCalculator
+
+    App\ApiClient\NbuApiClient:
+        arguments:
+            $baseUrl: '%nbu_api.base_url%'
+
+    App\ApiClient\Interface\TelegramClientInterface $telegramClient:
+        alias: App\ApiClient\TelegramClient
+
+    App\ApiClient\TelegramClient:
+        arguments:
+            $botToken: '%telegram_bot_token%'
+
+    App\EventListener\ValidatorListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller_arguments }
+
+#    App\Controller\Telegram\TelegramBotController:
+#        arguments:
+#            $menuButton: '%telegram_menu_button%'

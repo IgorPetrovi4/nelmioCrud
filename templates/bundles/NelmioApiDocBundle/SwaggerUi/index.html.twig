@@ -1,0 +1,16 @@
+{% extends '@!NelmioApiDoc/SwaggerUi/index.html.twig' %}
+
+{% block meta %}
+    {{ parent() }}
+    <link rel="icon" type="image/x-icon" href="https://img.icons8.com/color/96/filled-star--v1.png">
+{% endblock meta %}
+
+    {% block header_block %}
+        <header>
+            {% block header %}
+{#                <a id="logo" href="https://github.com/nelmio/NelmioApiDocBundle">#}
+{#                    <img src="{{ nelmioAsset(assets_mode, 'logo.png') }}" alt="NelmioApiDocBundle">#}
+{#                </a>#}
+            {% endblock header %}
+        </header>
+    {% endblock header_block %}

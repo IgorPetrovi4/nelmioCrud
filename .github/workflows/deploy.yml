@@ -1,0 +1,44 @@
+name: Deploy Symfony App
+
+on:
+  push:
+    branches:
+      - master  # Деплой будет срабатывать при пуше в ветку main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Шаг 1: Клонирование кода из репозитория
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Шаг 2: Настройка SSH для подключения к серверу
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H 34.172.76.95 >> ~/.ssh/known_hosts
+
+      # Шаг 3: Деплой приложения с помощью rsync
+      - name: Deploy via rsync
+        run: |
+          rsync -avz \
+          -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
+          ./ petrov120482@34.172.76.95:/var/www/nelmioCrud
+    
+
+      # Шаг 4: Установка зависимостей через composer
+      - name: Install dependencies
+        run: ssh -i ~/.ssh/id_rsa petrov120482@34.172.76.95 "cd /var/www/nelmioCrud && composer install --no-dev --optimize-autoloader"
+
+      # Шаг 5: Выполнение миграций базы данных
+      - name: Run migrations
+        run: ssh -i ~/.ssh/id_rsa petrov120482@34.172.76.95 "cd /var/www/nelmioCrud && php bin/console doctrine:database:create --if-not-exists  && php bin/console doctrine:migrations:migrate --no-interaction"
+
+      # Шаг 6: Очистка кеша Symfony
+      - name: Clear Symfony cache
+        run: ssh -i ~/.ssh/id_rsa petrov120482@34.172.76.95 "cd /var/www/nelmioCrud && php bin/console cache:clear"
+

@@ -1,0 +1,130 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+    color: #333;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.container {
+    max-width: 400px;
+    margin: 50px auto;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #007bff;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border 0.3s, background-color 0.3s;
+}
+
+input:focus, select:focus {
+    border-color: #007bff;
+    background-color: #eef;
+}
+
+.btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+#result {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    text-align: center;
+    font-size: 18px;
+}
+
+.result-box {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.result-item {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+/* Dark mode */
+body.dark {
+    background-color: #1c1c1c;
+    color: #f0f0f0;
+}
+
+body.dark .container {
+    background-color: #2c2c2c;
+}
+
+body.dark h1 {
+    color: #00aaff;
+}
+
+body.dark input, body.dark select {
+    background-color: #333;
+    border-color: #555;
+    color: #f0f0f0;
+}
+
+body.dark input:focus, body.dark select:focus {
+    border-color: #00aaff;
+    background-color: #333;
+}
+
+body.dark .btn {
+    background-color: #00aaff;
+}
+
+body.dark .btn:hover {
+    background-color: #0077cc;
+}
+
+body.dark #result {
+    background-color: #333;
+    border-color: #555;
+}
+
+body.dark .result-box {
+    background-color: #333;
+    box-shadow: none;
+}
